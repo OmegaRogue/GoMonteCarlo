@@ -2,60 +2,28 @@ package main
 
 import (
 	"fmt"
-	"github.com/schollz/progressbar/v2"
-	"log"
+	"math"
 	"time"
 )
 
-//func Integration1D(f func(float64) float64, a, b float64, N int) float64 {
-//
-//
-//	var t0 int64
-//	var tEnd int64
-//	var e float64
-//	t0 = time.Now().UnixNano()
-//	ba := b - a
-//
-//	R := arrayRandFloat(a, b, N)
-//	fR := make([]float64, N)
-//
-//	for i, v := range R {
-//		fR[i] = f(v)
-//	}
-//	sumFR := floatArraySum(fR, 0, N-1)
-//
-//	e = ba * (1.0 / float64(N)) * sumFR
-//
-//	tEnd = time.Now().UnixNano()
-//
-//	fmt.Println("The Final Estimate:", e, "Done after", tEnd-t0, "nanoseconds")
-//
-//	return e
-//}
-
-func Integration(f func(float64) float64, a, b float64, N int) float64 {
-
-	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true), progressbar.OptionSetWriter(log.Writer()))
-	ba := b - a
-
+func Integration() {
+	k := 0
+	var t0 int64
+	var tEnd int64
 	var e float64
-	t0 := time.Now()
-
-	var k float64
-
-	for n := 0; n < N; n++ {
-		k += f(randFloat(a, b))
-
-		if n%(N/100) == 0 {
-			e = ba * (1.0 / float64(n)) * k
-			bar.Describe(fmt.Sprintf("The Estimate: %32.32f", e))
-			_ = bar.Add(1)
+	t0 = time.Now().UnixNano()
+	for n := 1; n < 10000000000; n++ {
+		x := randFloat(-1.0, 1.0)
+		y := randFloat(-1.0, 1.0)
+		if distanceTo0(x, y) <= 1.0 {
+			k += 1
+		}
+		e = float64(k) / float64(n)
+		if n%100000000 == 0 {
+			fmt.Println("The Estimate:", e, "The Difference:", math.Pi-e, "After", time.Now().UnixNano()-t0, "nanoseconds")
 		}
 	}
+	tEnd = time.Now().UnixNano()
+	fmt.Println("The Final Estimate:", e, "The Final Difference:", math.Pi-e, "Done after", tEnd-t0, "nanoseconds")
 
-	e = ba * (1.0 / float64(N)) * k
-
-	_, _ = fmt.Fprintln(log.Writer(), "\nThe Final Estimate:", e, "Done after", time.Since(t0).String())
-
-	return e
 }

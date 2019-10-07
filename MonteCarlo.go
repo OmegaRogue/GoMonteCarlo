@@ -24,6 +24,7 @@ func init() {
 }
 
 func main() {
+
 	port := os.Getenv("PORT")
 
 	if port == "" {
@@ -47,11 +48,23 @@ func main() {
 
 	})
 
+	var N, _ = strconv.ParseInt(os.Getenv("N"), 10, 64)
+	var a, _ = strconv.ParseFloat(os.Getenv("min"), 64)
+	var b, _ = strconv.ParseFloat(os.Getenv("max"), 64)
+
+	switch os.Getenv("Mode") {
+	case "pi":
+		Pi(int(N))
+	case "integral":
+		Integration(f, a, b, int(N))
+
+	}
+
 	router.Run(":" + port)
 
 }
 
 func f(x float64) (y float64) {
-	y = 4*math.Pow(x, 3) + 5*math.Pow(x, 2) + 3*x - 5
+	y = 3*math.Pow(x, 2) - 8*x + 7
 	return
 }

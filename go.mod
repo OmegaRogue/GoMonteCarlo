@@ -1,6 +1,6 @@
 module GoMonteCarlo
 
-go 1.13
+go 1.13.1
 
 require (
 	github.com/gin-gonic/gin v1.4.0

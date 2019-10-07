@@ -47,6 +47,7 @@ func main() {
 		Integration(f, a, b, int(N))
 
 	})
+	router.Run(":" + port)
 
 	var N, _ = strconv.ParseInt(os.Getenv("N"), 10, 64)
 	var a, _ = strconv.ParseFloat(os.Getenv("min"), 64)
@@ -59,8 +60,6 @@ func main() {
 		Integration(f, a, b, int(N))
 
 	}
-
-	router.Run(":" + port)
 
 }
 

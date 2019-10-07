@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/schollz/progressbar/v2"
 	"time"
 )
@@ -33,9 +32,9 @@ import (
 //	return e
 //}
 
-func Integration(f func(float64) float64, a, b float64, N int, c *gin.Context) float64 {
+func Integration(f func(float64) float64, a, b float64, N int) float64 {
 
-	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true), progressbar.OptionSetWriter(c.Writer))
+	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true))
 	ba := b - a
 
 	var e float64
@@ -55,7 +54,7 @@ func Integration(f func(float64) float64, a, b float64, N int, c *gin.Context) f
 
 	e = ba * (1.0 / float64(N)) * k
 
-	_, _ = fmt.Fprintln(c.Writer, "\nThe Final Estimate:", e, "Done after", time.Since(t0).String())
+	_, _ = fmt.Println("\nThe Final Estimate:", e, "Done after", time.Since(t0).String())
 
 	return e
 }

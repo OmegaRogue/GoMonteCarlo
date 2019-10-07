@@ -36,7 +36,7 @@ func main() {
 
 	router.GET("/pi", func(c *gin.Context) {
 		N, _ := strconv.ParseInt(c.Query("N"), 10, 64)
-		Pi(int(N), c)
+		Pi(int(N))
 
 	})
 	router.GET("/integral", func(c *gin.Context) {
@@ -44,7 +44,7 @@ func main() {
 		var a, _ = strconv.ParseFloat(c.DefaultQuery("min", "0"), 64)
 		var b, _ = strconv.ParseFloat(c.Query("max"), 64)
 
-		Integration(f, a, b, int(N), c)
+		Integration(f, a, b, int(N))
 
 	})
 

@@ -2,14 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/schollz/progressbar/v2"
 	"math"
 	"time"
 )
 
-func Pi(iterations int, c *gin.Context) {
-	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true), progressbar.OptionSetWriter(c.Writer))
+func Pi(iterations int) {
+	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true))
 	k := 0
 	var e float64
 	t0 := time.Now()
@@ -25,5 +24,5 @@ func Pi(iterations int, c *gin.Context) {
 			_ = bar.Add(1)
 		}
 	}
-	fmt.Fprintf(c.Writer, "\nThe Final Estimate: %v The Final Difference: %v Done after %s\n", e, math.Pi-e, time.Since(t0).String())
+	fmt.Printf("\nThe Final Estimate: %v The Final Difference: %v Done after %s\n", e, math.Pi-e, time.Since(t0).String())
 }

@@ -8,7 +8,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/gin-gonic/gin"
 	_ "github.com/heroku/x/hmetrics/onload"
 	"log"
 )
@@ -31,23 +30,23 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	router := gin.New()
-	router.Use(gin.Logger())
-
-	router.GET("/pi", func(c *gin.Context) {
-		N, _ := strconv.ParseInt(c.Query("N"), 10, 64)
-		Pi(int(N))
-
-	})
-	router.GET("/integral", func(c *gin.Context) {
-		var N, _ = strconv.ParseInt(c.Query("N"), 10, 64)
-		var a, _ = strconv.ParseFloat(c.DefaultQuery("min", "0"), 64)
-		var b, _ = strconv.ParseFloat(c.Query("max"), 64)
-
-		Integration(f, a, b, int(N))
-
-	})
-	router.Run(":" + port)
+	//router := gin.New()
+	//router.Use(gin.Logger())
+	//
+	//router.GET("/pi", func(c *gin.Context) {
+	//	N, _ := strconv.ParseInt(c.Query("N"), 10, 64)
+	//	Pi(int(N))
+	//
+	//})
+	//router.GET("/integral", func(c *gin.Context) {
+	//	var N, _ = strconv.ParseInt(c.Query("N"), 10, 64)
+	//	var a, _ = strconv.ParseFloat(c.DefaultQuery("min", "0"), 64)
+	//	var b, _ = strconv.ParseFloat(c.Query("max"), 64)
+	//
+	//	Integration(f, a, b, int(N))
+	//
+	//})
+	//router.Run(":" + port)
 
 	var N, _ = strconv.ParseInt(os.Getenv("N"), 10, 64)
 	var a, _ = strconv.ParseFloat(os.Getenv("min"), 64)

@@ -3,12 +3,13 @@ package main
 import (
 	"fmt"
 	"github.com/schollz/progressbar/v2"
+	"log"
 	"math"
 	"time"
 )
 
 func Pi(iterations int) {
-	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true))
+	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true), progressbar.OptionSetWriter(log.Writer()))
 	k := 0
 	var e float64
 	t0 := time.Now()
@@ -24,5 +25,6 @@ func Pi(iterations int) {
 			_ = bar.Add(1)
 		}
 	}
-	fmt.Printf("\nThe Final Estimate: %v The Final Difference: %v Done after %s\n", e, math.Pi-e, time.Since(t0).String())
+
+	fmt.Fprintf(log.Writer(), "\nThe Final Estimate: %v The Final Difference: %v Done after %s\n", e, math.Pi-e, time.Since(t0).String())
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/schollz/progressbar/v2"
+	"log"
 	"time"
 )
 
@@ -34,7 +35,7 @@ import (
 
 func Integration(f func(float64) float64, a, b float64, N int) float64 {
 
-	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true))
+	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true), progressbar.OptionSetWriter(log.Writer()))
 	ba := b - a
 
 	var e float64
@@ -54,7 +55,7 @@ func Integration(f func(float64) float64, a, b float64, N int) float64 {
 
 	e = ba * (1.0 / float64(N)) * k
 
-	_, _ = fmt.Println("\nThe Final Estimate:", e, "Done after", time.Since(t0).String())
+	_, _ = fmt.Fprintln(log.Writer(), "\nThe Final Estimate:", e, "Done after", time.Since(t0).String())
 
 	return e
 }

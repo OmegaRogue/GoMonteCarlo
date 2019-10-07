@@ -3,11 +3,14 @@ package main
 import (
 	crypto_rand "crypto/rand"
 	"encoding/binary"
-	"fmt"
 	"math"
 	math_rand "math/rand"
 	"os"
 	"strconv"
+
+	"github.com/gin-gonic/gin"
+	_ "github.com/heroku/x/hmetrics/onload"
+	"log"
 )
 
 func init() {
@@ -22,25 +25,34 @@ func init() {
 
 func main() {
 
-	N, _:= strconv.ParseInt(os.Getenv("N"),10,64)
-	a, _:= strconv.ParseFloat(os.Getenv("min"),64)
-	b, _:= strconv.ParseFloat(os.Getenv("max"),64)
+	port := os.Getenv("PORT")
 
-	switch os.Getenv("Mode") {
-	case "Pi":
-		Pi(int(N))
-	case "Integral":
-		e := Integration(f, a, b, int(N))
-		fmt.Println(e, "Diff:", 2.0-e)
-	default:
-		Pi(int(N))
+	if port == "" {
+		log.Fatal("$PORT must be set")
 	}
 
+	router := gin.New()
+	router.Use(gin.Logger())
 
+	router.GET("/pi", func(c *gin.Context) {
+		N, _ := strconv.ParseInt(c.Query("N"), 10, 64)
+		Pi(int(N), c)
+
+	})
+	router.GET("/integral", func(c *gin.Context) {
+		var N, _ = strconv.ParseInt(c.Query("N"), 10, 64)
+		var a, _ = strconv.ParseFloat(c.DefaultQuery("min", "0"), 64)
+		var b, _ = strconv.ParseFloat(c.Query("max"), 64)
+
+		Integration(f, a, b, int(N), c)
+
+	})
+
+	router.Run(":" + port)
 
 }
 
 func f(x float64) (y float64) {
-	y = math.Sin(x)
+	y = 4*math.Pow(x, 3) + 5*math.Pow(x, 2) + 3*x - 5
 	return
 }

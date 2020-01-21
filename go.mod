@@ -1,10 +1,8 @@
-module GoMonteCarlo
+module main
 
-// +heroku goVersion go1.13.1
-go 1.13.1
+go 1.13
 
 require (
-	github.com/gin-gonic/gin v1.4.0
-	github.com/heroku/x v0.0.9
-	github.com/schollz/progressbar/v2 v2.14.0
+	github.com/schollz/progressbar v1.0.0
+	github.com/schollz/progressbar/v2 v2.15.0
 )

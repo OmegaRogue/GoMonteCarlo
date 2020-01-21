@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/schollz/progressbar/v2"
 	"math"
 	"time"
 )
 
 func Pi(iterations int) {
+	bar := progressbar.NewOptions(100, progressbar.OptionEnableColorCodes(true))
 	k := 0
-	var t0 int64
-	var tEnd int64
 	var e float64
-	t0 = time.Now().UnixNano()
+	t0 := time.Now()
 	for n := 1; n < iterations; n++ {
 		x := randFloat(-1.0, 1.0)
 		y := randFloat(-1.0, 1.0)
@@ -20,10 +20,10 @@ func Pi(iterations int) {
 		}
 		e = float64(k) / float64(n) * 4.0
 		if n%(iterations/100) == 0 {
-			fmt.Println("The Estimate:", e, "The Difference:", math.Pi-e, "After", time.Now().UnixNano()-t0, "nanoseconds")
+			fmt.Println()
+			bar.Describe(fmt.Sprintf("The Estimate: %v The Difference: %v After %s", e, math.Pi-e, time.Since(t0).String()))
+			_ = bar.Add(1)
 		}
 	}
-	tEnd = time.Now().UnixNano()
-	fmt.Println("The Final Estimate:", e, "The Final Difference:", math.Pi-e, "Done after", tEnd-t0, "nanoseconds")
-
+	fmt.Printf("The Final Estimate: %v The Final Difference: %v Done after %s\n", e, math.Pi-e, time.Since(t0).String())
 }

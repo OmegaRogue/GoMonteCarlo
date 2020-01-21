@@ -2,28 +2,28 @@ package main
 
 import (
 	"fmt"
-	"math"
 	"time"
 )
 
-func Integration() {
-	k := 0
-	var t0 int64
-	var tEnd int64
-	var e float64
-	t0 = time.Now().UnixNano()
-	for n := 1; n < 10000000000; n++ {
-		x := randFloat(-1.0, 1.0)
-		y := randFloat(-1.0, 1.0)
-		if distanceTo0(x, y) <= 1.0 {
-			k += 1
-		}
-		e = float64(k) / float64(n)
-		if n%100000000 == 0 {
-			fmt.Println("The Estimate:", e, "The Difference:", math.Pi-e, "After", time.Now().UnixNano()-t0, "nanoseconds")
-		}
-	}
-	tEnd = time.Now().UnixNano()
-	fmt.Println("The Final Estimate:", e, "The Final Difference:", math.Pi-e, "Done after", tEnd-t0, "nanoseconds")
+func Integration(f func(float64) float64, a, b float64, N int) float64 {
 
+	ba := b - a
+
+	var e float64
+	t0 := time.Now()
+
+	c := make(chan float64, N)
+	for i := 0; i < N; i++ {
+		go integrate(f, a, b, c)
+	}
+
+	e = ba * (1.0 / float64(N)) * <-c
+
+	fmt.Println("The Final Estimate:", e, "Done after", time.Since(t0).String())
+
+	return e
+}
+
+func integrate(f func(float64) float64, a, b float64, c chan float64) {
+	c <- f(randFloat(a, b)) + <-c
 }
